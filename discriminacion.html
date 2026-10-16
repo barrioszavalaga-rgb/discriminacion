@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discriminación: entenderla para frenarla</title>
+<meta name="description" content="Qué es la discriminación, qué tipos existen, qué consecuencias tiene y cómo podemos detenerla.">
+<style>
+:root{
+  --ink:#1b2340; --paper:#f6f7fb; --card:#ffffff; --muted:#4d5673; --line:#d9ddea;
+  --c1:#e4572e; --c2:#f2a900; --c3:#2a9d8f; --c4:#3a6ea5; --c5:#8a4fb3; --c6:#c2417a;
+  --serif:Georgia,"Times New Roman",serif; --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.65;font-size:1.05rem}
+a{color:var(--c4)}
+:focus-visible{outline:3px solid var(--c2);outline-offset:3px;border-radius:4px}
+.wrap{max-width:62rem;margin:0 auto;padding:0 1.25rem}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:0}
+h2{font-size:clamp(1.7rem,4vw,2.4rem);margin-bottom:.6rem}
+h3{font-size:1.25rem;margin-bottom:.3rem}
+p{margin:.6rem 0;max-width:68ch}
+section{padding:3.5rem 0;border-top:1px solid var(--line)}
+.lead{font-size:1.2rem;color:var(--muted)}
+
+/* barra superior */
+header.top{position:sticky;top:0;z-index:5;background:rgba(246,247,251,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:1.2rem;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:.6rem;padding-bottom:.6rem}
+header.top b{font-family:var(--serif);font-size:1.1rem}
+nav{display:flex;gap:1rem;flex-wrap:wrap;font-size:.95rem}
+nav a{text-decoration:none;color:var(--ink);padding:.15rem .1rem;border-bottom:2px solid transparent}
+nav a:hover{border-bottom-color:var(--c2)}
+
+/* portada */
+.hero{padding:4rem 0 3rem;border-top:0}
+.hero h1{font-size:clamp(2.4rem,8vw,5rem);max-width:14ch;letter-spacing:-.02em}
+.hero p{font-size:1.25rem;color:var(--muted);max-width:44ch}
+.ring{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2rem}
+.ring i{width:2.6rem;height:2.6rem;border-radius:50%;display:block}
+.ring i:nth-child(6n+1){background:var(--c1)}.ring i:nth-child(6n+2){background:var(--c2)}
+.ring i:nth-child(6n+3){background:var(--c3)}.ring i:nth-child(6n+4){background:var(--c4)}
+.ring i:nth-child(6n+5){background:var(--c5)}.ring i:nth-child(6n){background:var(--c6)}
+.ring-note{font-size:.95rem;color:var(--muted)}
+
+/* tipos */
+.types{display:grid;gap:1rem;margin-top:1.5rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.type{background:var(--card);border-left:8px solid var(--c);padding:1rem 1.2rem;border-radius:0 12px 12px 0}
+.type p{margin:.2rem 0;font-size:1rem}
+.type small{color:var(--muted)}
+
+/* proceso */
+.steps{list-style:none;padding:0;margin:1.5rem 0 0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));counter-reset:s}
+.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem}
+.steps li::before{content:counter(s);display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--ink);color:#fff;font-weight:700;margin-bottom:.4rem}
+
+/* consecuencias */
+.cons{columns:2 18rem;column-gap:2rem;margin-top:1rem}
+.cons p{break-inside:avoid;max-width:none}
+
+/* hacer / no hacer */
+.two{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));margin-top:1.5rem}
+.box{background:var(--card);border-radius:12px;padding:1.2rem 1.4rem;border-top:6px solid var(--c3)}
+.box.no{border-top-color:var(--c1)}
+.box ul{margin:.4rem 0 0;padding-left:1.2rem}
+.box li{margin:.35rem 0}
+
+/* quiz */
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.2rem 1.4rem;margin-top:1.2rem}
+.q p.t{font-weight:700;margin-top:0}
+.opts{display:grid;gap:.5rem}
+.opts button{font:inherit;text-align:left;padding:.7rem .9rem;border:2px solid var(--line);background:var(--paper);border-radius:10px;cursor:pointer;color:var(--ink)}
+.opts button:hover:not(:disabled){border-color:var(--c4)}
+.opts button.ok{border-color:var(--c3);background:#e3f4f1}
+.opts button.bad{border-color:var(--c1);background:#fbe7e1}
+.opts button:disabled{cursor:default}
+.fb{margin:.8rem 0 0;font-size:1rem;min-height:1.5rem}
+#score{font-family:var(--serif);font-size:1.4rem;margin-top:1.2rem}
+.reset{font:inherit;margin-top:.6rem;padding:.5rem 1rem;border-radius:999px;border:2px solid var(--ink);background:transparent;cursor:pointer}
+.reset:hover{background:var(--ink);color:#fff}
+
+/* cierre */
+blockquote{margin:1.2rem 0;padding:1rem 1.4rem;border-left:6px solid var(--c2);background:var(--card);border-radius:0 12px 12px 0;font-family:var(--serif);font-size:1.2rem}
+footer{background:var(--ink);color:#e9ecf7;padding:2rem 0;margin-top:2rem;font-size:.95rem}
+footer a{color:#ffd76a}
+footer p{max-width:none}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{header.top{position:static}.reset,nav{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <b>Contra la discriminación</b>
+    <nav aria-label="Secciones">
+      <a href="#que-es">Qué es</a>
+      <a href="#tipos">Tipos</a>
+      <a href="#origen">Cómo empieza</a>
+      <a href="#efectos">Consecuencias</a>
+      <a href="#actuar">Qué hacer</a>
+      <a href="#quiz">Pon a prueba</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <h1>Todos somos distintos. Todos valemos igual.</h1>
+    <p>La discriminación hace daño a personas reales. Esta página explica qué es, por qué ocurre y qué podemos hacer para frenarla.</p>
+    <div class="ring" role="img" aria-label="Una fila de círculos de muchos colores, todos del mismo tamaño y juntos">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <p class="ring-note">Cada color es diferente, pero ninguno es más grande que otro.</p>
+  </div>
+</section>
+
+<section id="que-es">
+  <div class="wrap">
+    <h2>¿Qué es la discriminación?</h2>
+    <p class="lead">Es tratar peor a una persona o a un grupo solo por una característica que tiene, como su origen, su color de piel, su género, su religión, su discapacidad o su situación económica.</p>
+    <p>Puede ser una burla, un insulto, una exclusión o un trato injusto en el colegio, en el trabajo o en la calle. A veces es muy evidente y a veces es sutil, pero siempre le quita a alguien un derecho: el de ser respetado.</p>
+    <p>Discriminar no es lo mismo que tener una opinión distinta. Es negar oportunidades o dignidad a alguien por lo que es, no por lo que hace.</p>
+  </div>
+</section>
+
+<section id="tipos">
+  <div class="wrap">
+    <h2>Tipos de discriminación</h2>
+    <p>Existen muchas formas. Estas son algunas de las más comunes:</p>
+    <div class="types">
+      <article class="type" style="--c:var(--c1)">
+        <h3>Racial o étnica</h3>
+        <p>Rechazo por el color de piel, los rasgos físicos o la cultura de origen.</p>
+        <p><small>Ejemplo: burlarse del acento o de los apellidos de alguien.</small></p>
+      </article>
+      <article class="type" style="--c:var(--c6)">
+        <h3>Por género</h3>
+        <p>Dar menos valor o menos oportunidades a alguien por ser mujer, hombre o por su identidad de género.</p>
+        <p><small>Ejemplo: decir que «eso no es cosa de niñas».</small></p>
+      </article>
+      <article class="type" style="--c:var(--c4)">
+        <h3>Por discapacidad</h3>
+        <p>Excluir a personas con discapacidad física, sensorial, intelectual o psicosocial.</p>
+        <p><small>Ejemplo: no dejar que alguien participe en un juego sin preguntarle.</small></p>
+      </article>
+      <article class="type" style="--c:var(--c3)">
+        <h3>Por origen o nacionalidad</h3>
+        <p>Rechazo hacia migrantes o personas de otra región o país. Se llama xenofobia.</p>
+        <p><small>Ejemplo: culpar a los extranjeros de todos los problemas.</small></p>
+      </article>
+      <article class="type" style="--c:var(--c5)">
+        <h3>Religiosa</h3>
+        <p>Burlas o trato injusto por las creencias de una persona, o por no tener ninguna.</p>
+        <p><small>Ejemplo: excluir a alguien por la forma en que celebra sus fiestas.</small></p>
+      </article>
+      <article class="type" style="--c:var(--c2)">
+        <h3>Social, económica o por apariencia</h3>
+        <p>Tratar mal a alguien por tener menos dinero, por su ropa, su peso o su aspecto.</p>
+        <p><small>Ejemplo: no juntarse con alguien por vivir en otro barrio.</small></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="origen">
+  <div class="wrap">
+    <h2>Cómo empieza</h2>
+    <p>La discriminación casi nunca aparece de golpe. Suele crecer en tres pasos, y podemos cortarla en cualquiera de ellos.</p>
+    <ol class="steps">
+      <li>
+        <h3>Estereotipo</h3>
+        <p>Una idea simplificada sobre un grupo: «todos los de ese lugar son así». Es una generalización que ignora a cada persona.</p>
+      </li>
+      <li>
+        <h3>Prejuicio</h3>
+        <p>Un juicio negativo que se forma sin conocer a la persona. Se siente rechazo antes de saber quién es.</p>
+      </li>
+      <li>
+        <h3>Discriminación</h3>
+        <p>El prejuicio se convierte en acciones: burlas, exclusión, maltrato o negar un derecho.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="efectos">
+  <div class="wrap">
+    <h2>Consecuencias</h2>
+    <p>La discriminación no daña solo a quien la recibe. Afecta a todo el grupo donde ocurre.</p>
+    <div class="cons">
+      <p><strong>En la persona.</strong> Puede causar tristeza, ansiedad, miedo a ir al colegio, baja autoestima y sensación de soledad.</p>
+      <p><strong>En el estudio y el trabajo.</strong> Quien se siente rechazado participa menos y pierde oportunidades, aunque tenga mucho talento.</p>
+      <p><strong>En la convivencia.</strong> Crea grupos enfrentados, desconfianza y violencia.</p>
+      <p><strong>En la sociedad.</strong> Perdemos ideas, habilidades y aportes de personas que quedan fuera. Una sociedad que excluye es más injusta y más pobre.</p>
+    </div>
+  </div>
+</section>
+
+<section id="actuar">
+  <div class="wrap">
+    <h2>Qué podemos hacer</h2>
+    <p>Combatir la discriminación empieza con decisiones pequeñas y diarias.</p>
+    <div class="two">
+      <div class="box">
+        <h3>Sí</h3>
+        <ul>
+          <li>Conocer a las personas antes de juzgarlas.</li>
+          <li>Hablar con respeto y escuchar otras formas de pensar.</li>
+          <li>Acompañar a quien está siendo excluido o molestado.</li>
+          <li>Avisar a un profesor, tutor o adulto de confianza si ves maltrato.</li>
+          <li>Preguntarte de dónde viene una idea antes de repetirla.</li>
+        </ul>
+      </div>
+      <div class="box no">
+        <h3>No</h3>
+        <ul>
+          <li>Reírte de apodos, imitaciones o chistes que humillan.</li>
+          <li>Compartir memes o mensajes que ofenden a un grupo.</li>
+          <li>Quedarte callado cuando alguien es maltratado.</li>
+          <li>Decir «era solo una broma» para justificar el daño.</li>
+          <li>Generalizar sobre todo un grupo por lo que hizo una persona.</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote>Según la Declaración Universal de los Derechos Humanos (1948), todas las personas nacen libres e iguales en dignidad y derechos.</blockquote>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="wrap">
+    <h2>Ponte a prueba</h2>
+    <p>Elige qué harías en cada situación.</p>
+    <div id="quiz"></div>
+    <p id="score" aria-live="polite"></p>
+    <button class="reset" id="reset" type="button" hidden>Volver a intentar</button>
+  </div>
+</section>
+
+<section id="cierre">
+  <div class="wrap">
+    <h2>Para terminar</h2>
+    <p class="lead">Nadie elige dónde nace, cómo se ve ni qué cultura tiene. Lo que sí podemos elegir todos es cómo tratamos a los demás.</p>
+    <p>Respetar las diferencias hace más fuertes a un salón, un colegio y un país. Empieza hoy, con la próxima persona que conozcas.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Fuentes de referencia:</strong> Declaración Universal de los Derechos Humanos (Naciones Unidas, 1948) y materiales educativos sobre derechos humanos y convivencia escolar.</p>
+    <p>Proyecto escolar hecho con ayuda de inteligencia artificial.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var preguntas=[
+    {t:"Ves que un grupo se ríe de un compañero por su acento. ¿Qué haces?",
+     o:["Me río también para no quedar mal.","No me meto, no es mi problema.","Le digo al grupo que pare y me acerco a hablar con mi compañero."],
+     c:2,e:"Acompañar a la persona y decir que no está bien ayuda a cortar la burla. Reírse o callar le da fuerza."},
+    {t:"Un amigo comparte un meme que se burla de un grupo de personas. ¿Qué haces?",
+     o:["Le explico con calma que ese meme puede hacer daño.","Lo reenvío, total es un chiste.","Dejo de hablarle sin decirle nada."],
+     c:0,e:"Hablar con respeto permite que tu amigo entienda el daño y cambie. Reenviar el meme lo multiplica."},
+    {t:"Llega un alumno nuevo de otro país y está solo en el recreo. ¿Qué haces?",
+     o:["Lo observo de lejos.","Lo invito a jugar o a sentarse con nosotros.","Espero a que otro lo haga."],
+     c:1,e:"Un gesto simple de inclusión puede cambiar el día, y toda la experiencia escolar, de una persona."}
+  ];
+  var box=document.getElementById("quiz"),score=document.getElementById("score"),reset=document.getElementById("reset");
+  var puntos=0,respondidas=0;
+  function render(){
+    box.innerHTML="";score.textContent="";reset.hidden=true;puntos=0;respondidas=0;
+    preguntas.forEach(function(p,i){
+      var d=document.createElement("div");d.className="q";
+      var t=document.createElement("p");t.className="t";t.textContent=(i+1)+". "+p.t;d.appendChild(t);
+      var g=document.createElement("div");g.className="opts";
+      var fb=document.createElement("p");fb.className="fb";fb.setAttribute("aria-live","polite");
+      p.o.forEach(function(txt,j){
+        var b=document.createElement("button");b.type="button";b.textContent=txt;
+        b.addEventListener("click",function(){
+          var bs=g.querySelectorAll("button");
+          bs.forEach(function(x){x.disabled=true});
+          bs[p.c].classList.add("ok");
+          if(j===p.c){puntos++;fb.textContent="¡Muy bien! "+p.e}
+          else{b.classList.add("bad");fb.textContent="No es la mejor opción. "+p.e}
+          respondidas++;
+          if(respondidas===preguntas.length){
+            score.textContent="Resultado: "+puntos+" de "+preguntas.length+" respuestas correctas.";
+            reset.hidden=false;
+          }
+        });
+        g.appendChild(b);
+      });
+      d.appendChild(g);d.appendChild(fb);box.appendChild(d);
+    });
+  }
+  reset.addEventListener("click",render);
+  render();
+})();
+</script>
+</body>
+</html>
